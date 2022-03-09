@@ -1,0 +1,12 @@
+<div class="row text-white" *ngIf="movies.length > 0">
+    <h1>Filmes para Alugar <small *ngIf="totalMovies > 0">({{ totalMovies }})</small></h1>
+    <hr>
+    <app-movies-poster-details [movies]="movies"></app-movies-poster-details>
+</div>
+
+<div class="row" *ngIf="movies.length == 0">
+    <div class="alert alert-warning mt-5">
+        <strong class="float-start">Atualmente não há filmes registrados.</strong>
+        <strong class="float-end">Cadastro <i class='fas fa-location-arrow'></i></strong>
+    </div>
+</div>

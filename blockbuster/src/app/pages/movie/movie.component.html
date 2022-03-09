@@ -1,0 +1,161 @@
+<div class="row text-white" *ngFor="let movie of movies">
+    <div class="col-md-4">
+        <img src="{{movie.poster_path | poster}}" title="{{ movie.title }}" class="img-thumbnail">
+    </div>
+    <div class="col-md-8">
+        <h3>{{ movie.title }}</h3>
+        <div class="row">
+            <div class="col-10">
+                <star-rating [value]="movie.vote_average" [totalstars]="10" checkedcolor="yellow" uncheckedcolor="grey" size="20px" [readonly]="false"></star-rating>
+            </div>
+            <div class="col-2">
+                {{ movie.vote_average | number:'1.1-2' }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                {{movie.overview}}
+            </div>
+        </div>
+        <div class="row mt-3">
+            <span>Gênero:</span>
+            <div class="col-12" *ngFor="let genres of movie.genres">
+                {{ genres.name }}
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row g-1 mb-2" *ngIf="actores.length > 0" >
+    <div class="col-md text-white">
+        <label>Principais Atores:</label>
+        <app-cast-slide [cast]="actores"></app-cast-slide>
+    </div>
+</div>
+<div class="row g-1 mb-2" *ngIf="directing.length > 0">
+    <div class="col-md text-white">
+        <label>Principais Diretores:</label>
+        <app-cast-slide [cast]="directing"></app-cast-slide>
+    </div>
+</div>
+<form (ngSubmit)="saveMovie(movie)" #movie="ngForm">
+    <div class="row my-5">
+        <div class="form" *ngIf="btn_save">
+            <div class="col-12 text-dark">
+                <div class="row g-2 mb-2">
+                    <div class="col-md">
+                        <div class="form-floating" *ngFor="let movie of movies">
+                            <input type="hidden" class="form-control" id="id_movie" name="id_movie" [ngModel]="movie.id">
+                            <input type="text" class="form-control" name="id_movie_show" [ngModel]="movie.id" disabled>
+                            <label for="id_movie">Número do Filme:</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="fornecedor" name="fornecedor" minlength="5"
+                                ngModel
+                                [class.is-invalid]="fornecedor.invalid && fornecedor.touched"
+                                #fornecedor="ngModel"
+                                required>
+                                <small class="form-text text-danger" *ngIf="fornecedor.invalid && fornecedor.touched">Insira o fornecedor (pelo menos 5 letras)</small>
+                                <label for="fornecedor">Fornecedor:</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2 mb-2">
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <select class="form-select" id="tipo_produto" name="tipo_produto"
+                            [class.is-invalid]="tipo_produto.invalid && tipo_produto.touched"
+                            ngModel
+                            #tipo_produto="ngModel"
+                            required>
+                                <option selected>Abra este menu de seleção</option>
+                                <option value="VHS">VHS</option>
+                                <option value="DVD">DVD</option>
+                                <option value="BLU-RAY">BLU-RAY</option>
+                            </select>
+                            <small class="form-text text-danger" *ngIf="tipo_produto.invalid && tipo_produto.touched">Selecione o tipo de produto</small>
+                            <label for="tipo_produto">Tipo Produto:</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <select class="form-select" id="tipo_movie" name="tipo_movie"
+                            [class.is-invalid]="tipo_movie.invalid && tipo_movie.touched"
+                            ngModel
+                            #tipo_movie="ngModel"
+                            required>
+                                <option selected>Abra este menu de seleção</option>
+                                <option value="6">6 HORAS</option>
+                                <option value="12">12 HORAS</option>
+                                <option value="24">24 HORAS</option>
+                                <option value="48">48 HORAS</option>
+                            </select>
+                            <small class="form-text text-danger" *ngIf="tipo_movie.invalid && tipo_movie.touched">Selecione o tipo de filme</small>
+                            <label for="tipo_movie">Tipo de Filme</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-2 mb-2">
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="idioma" name="idioma" minlength="5"
+                                ngModel
+                                [class.is-invalid]="idioma.invalid && idioma.touched"
+                                #idioma="ngModel"
+                                required>
+                                <small class="form-text text-danger" *ngIf="idioma.invalid && idioma.touched">Insira o tipo de idioma (pelo menos 5 letras)</small>
+                                <label for="idioma">tipo de Idioma:</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="valor_aluguer" name="valor_aluguer" minlength="1"
+                                ngModel
+                                [class.is-invalid]="valor_aluguer.invalid && valor_aluguer.touched"
+                                #valor_aluguer="ngModel"
+                                required>
+                                <small class="form-text text-danger" *ngIf="valor_aluguer.invalid && valor_aluguer.touched">Insira o valor da locação</small>
+                                <label for="valor_aluguer">Valor da Locação:</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mt-5">
+            <div class="float-end">
+                <button type="button" class="btn btn-outline-primary me-2" (click)="prevPage()"><i class='fas fa-chevron-left'></i> Voltar</button>
+                <button type="button" class="btn btn-outline-danger me-2" *ngIf="btn_remove" (click)="onClickRemove()"><i class='fas fa-trash-alt'></i> Excluir</button>
+                <button type="button" class="btn btn-outline-warning me-2" *ngIf="btn_cancel" (click)="onClickCancel()"><i class='fas fa-times'></i> Cancelar</button>
+                <button type="button" class="btn btn-outline-warning me-2" *ngIf="btn_update" (click)="onClickUpdate()"><i class='fas fa-edit'></i> Editar</button>
+                <button type="submit" class="btn btn-outline-primary me-2" *ngIf="btn_save"><i class='far fa-save'></i> Salvar</button>
+            </div>
+        </div>
+    </div>
+</form>
+  
+<!-- Modal -->
+<div #modalForm class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            ...
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Understood</button>
+        </div>
+        </div>
+    </div>
+</div>
